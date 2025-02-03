@@ -1,29 +1,36 @@
 // Deck.js
-import { Card } from './Card.js';
-import { shuffle } from 'lodash-es';
+import Card from "./Card.js";
+import shuffle from "./node_modules/lodash-es/shuffle.js";
 
-export class Deck {
-    cards = [];
+class Deck {
 
-    constructor(options) {
-        this.values = options.values;
-        this.suits = options.suits;
-        this.createFullDeck();
-    }
+  #cards = [];
+  
+  constructor(options) {
+    this.values = options.values;
+    this.suits = options.suits;
+  }
 
-    createFullDeck() {
-        this.suits.forEach(suit => {
-            this.values.forEach(value => {
-                this.cards.push(new Card(value, suit));
-            });
-        });
-    }
+  createFullDeck() {
+    this.values.forEach((v) => {
+      this.suits.forEach((s) => {
+        this.#cards.push(new Card(v, s));
+      });
+    });
+    return this;
+  }
 
-    displayCards() {
-        this.cards.forEach(card => card.display());
-    }
+  shuffle() {
+    this.#cards = shuffle(this.#cards);
+    return this;
+  }
 
-    shuffleDeck() {
-        this.cards = shuffle(this.cards);
-    }
+  displayCards() {
+    this.#cards.forEach((c) => {
+      c.display();
+    });
+    return this;
+  }
 }
+
+export default Deck;
