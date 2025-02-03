@@ -1,51 +1,31 @@
-class Card {
-    constructor(value, suit) {
-      this.value = value;
-      this.suit = suit;
-      this.element = this.#generateCardElement();
-    }
-  
-    display() {
-      document.querySelector(".deck").appendChild(this.element);
-      this.element.addEventListener("click", this.#toggleHidden.bind(this));
-      return this;
-    }
-  
-  
-    #generateCardElement() {
-      const card = document.createElement("div");
-      card.dataset.value = this.value;
-      card.dataset.suit = this.suit;
-  
-      card.classList.add("card");
-      card.classList.add("hidden");
-      card.classList.add(`v${this.value}`);
-      card.classList.add(this.suit.toLowerCase());
-  
-      const interior = document.createElement("div");
-      interior.classList.add("interior");
-      interior.insertAdjacentHTML("afterbegin", this.#generateCardInterior());
-      card.appendChild(interior);
-      return card;
-    }
-  
-  
-    #generateCardInterior() {
-      if (!isNaN(this.value)) {
-        let html = "";
-        for (let i = 1; i <= this.value; i++) {
-          html += `<div class="symbol"></div>`;
-        }
-        return html;
-      } else {
-        return `<div class="title">${this.value}</div>`;
-      }
-    }
+// Card.js
+export class Card {
+  #value;
+  #suit;
+  #element;
 
-    #toggleHidden() {
-      this.element.classList.toggle("hidden");
-    }
+  constructor(value, suit) {
+      this.#value = value;
+      this.#suit = suit;
+      this.#element = this.#generateCardElement();
   }
-  
-  export default Card;
-  
+
+  #generateCardInterior() {
+      return `<div class="card ${this.#suit.toLowerCase()}">
+                  <span class="symbol">${this.#value}</span>
+              </div>`;
+  }
+
+  #generateCardElement() {
+      const cardInterior = this.#generateCardInterior();
+      const element = document.createElement('div');
+      element.innerHTML = cardInterior;
+      element.classList.add('card');
+      return element;
+  }
+
+  display() {
+      const deckElement = document.querySelector('.deck');
+      deckElement.appendChild(this.#element);
+  }
+}
